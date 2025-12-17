@@ -20,7 +20,7 @@ st.set_page_config(
     page_title="Aadhaar Shield - Fraud Detection",
     page_icon="🆔",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 # Custom CSS with modern design
@@ -297,24 +297,6 @@ with col_ham:
     if st.button("☰" if not st.session_state.sidebar_open else "✕"):
         toggle_sidebar()
         st.rerun()
-
-# Control sidebar visibility with CSS - THIS IS THE FIX
-if not st.session_state.sidebar_open:
-    st.markdown("""
-    <style>
-    section[data-testid="stSidebar"] {
-        display: none !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-else:
-    st.markdown("""
-    <style>
-    section[data-testid="stSidebar"] {
-        display: block !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
 
 # Home Page
 def render_home():
@@ -734,11 +716,12 @@ def render_analytics():
     st.dataframe(pd.DataFrame(recent_data), use_container_width=True)
 
 # Navigation sidebar (collapsible)
-with st.sidebar:
-    # Close button at the top
-    if st.button("✕ Close Menu", use_container_width=True, type="secondary"):
-        toggle_sidebar()
-        st.rerun()
+if st.session_state.sidebar_open:
+    with st.sidebar:
+        # Close button at the top
+        if st.button("✕ Close Menu", use_container_width=True, type="secondary"):
+            toggle_sidebar()
+            st.rerun()
     
     st.markdown('<div style="text-align: center; margin: 20px 0;">', unsafe_allow_html=True)
     st.image("https://ovtechnology.in/skin/allfiles/img/logo/aadhar-logo.png", width=80)
